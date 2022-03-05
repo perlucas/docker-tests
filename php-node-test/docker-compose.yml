@@ -1,0 +1,26 @@
+services:
+    php:
+        container_name: php-node-test_php-server
+        image: php-node-test/php-server
+        env_file:
+            - .env
+        build:
+            context: .
+            dockerfile: ./php.Dockerfile
+            args:
+                PHP_WORKING_DIR: ${PHP_WORKING_DIR}
+                PHP_HOST: ${PHP_HOST}
+                PHP_PORT: ${PHP_PORT}
+        ports: 
+            - "8000:${PHP_PORT}"
+    
+    node:
+        container_name: php-node-test_node-server
+        image: node
+        user: "node"
+        working_dir: /home/node/app
+        env_file:
+            - .env
+        volumes:
+            - ./:/home/node/app
+        command: "npm start"
