@@ -5,22 +5,31 @@ services:
         env_file:
             - .env
         build:
-            context: .
+            context: ./php
             dockerfile: ./php.Dockerfile
             args:
                 PHP_WORKING_DIR: ${PHP_WORKING_DIR}
                 PHP_HOST: ${PHP_HOST}
                 PHP_PORT: ${PHP_PORT}
+        volumes:
+            - ./php/:${PHP_WORKING_DIR}
         ports: 
             - "8000:${PHP_PORT}"
+        # tty: true
+        # stdin_open: true
     
     node:
         container_name: php-node-test_node-server
         image: node
         user: "node"
-        working_dir: /home/node/app
         env_file:
             - .env
+        build:
+            context: ./node
+            dockerfile: ./node.Dockerfile
+            args:
+                NODE_WORKING_DIR: ${NODE_WORKING_DIR}
         volumes:
-            - ./:/home/node/app
-        command: "npm start"
+            - ./node/:${NODE_WORKING_DIR}
+        # tty: true
+        # stdin_open: true

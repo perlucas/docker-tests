@@ -7,7 +7,7 @@ const fetchData = () => {
 
     console.log("Requesting data from PHP Server...");
 
-    https.get('http://host.docker.internal:8000/test.php', resp => {
+    https.get('http://host.docker.internal:8000/server.php', resp => {
         let data = '';
 
         resp.on('data', chunk => {
@@ -15,7 +15,10 @@ const fetchData = () => {
         });
 
         resp.on('end', () => {
-            console.log(`Received response: ${data}`);
+            objectResponse = JSON.parse(data);
+
+            console.log(`Received response:`);
+            console.info(objectResponse);
 
             requestsCount++;
         });
