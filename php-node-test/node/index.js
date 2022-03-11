@@ -1,37 +1,39 @@
 const https = require('http');
 
+const URL = `${process.env.NODE_HOST}/server.php`;
+
 let requestsCount = 0;
 
 
 const fetchData = () => {
 
-    console.log("Requesting data from PHP Server...");
-
-    https.get('http://host.docker.internal:8000/server.php', resp => {
-        let data = '';
-
-        resp.on('data', chunk => {
-            data += chunk;
+    return new Promise((resolve, reject) => {
+        https.get(URL, resp => {
+            let data = '';
+    
+            resp.on('data', chunk => {
+                data += chunk;
+            });
+    
+            resp.on('end', () => {
+                resolve(JSON.parse(data));
+            });
+    
+        }).on("error", (err) => {
+            reject(err);
         });
-
-        resp.on('end', () => {
-            objectResponse = JSON.parse(data);
-
-            console.log(`Received response:`);
-            console.info(objectResponse);
-
-            requestsCount++;
-        });
-
-    }).on("error", (err) => {
-        console.log("Error: " + err.message);
-    });
+    });   
 
 };
 
-const timer = setInterval(() => {
+const timer = setInterval(async () => {
 
-    fetchData();
+    const data = await fetchData();
+
+    requestsCount++;
+
+    console.log("Received response:");
+    console.info(data);
 
     if (requestsCount > 20) {
         clearInterval(timer);

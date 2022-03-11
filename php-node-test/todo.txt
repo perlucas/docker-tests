@@ -1,2 +1,0 @@
-Improve nodeJS client by using env variables
-Use another Promises approach to make it clearer?
