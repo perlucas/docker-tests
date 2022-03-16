@@ -1,0 +1,34 @@
+services:
+    php:
+        container_name: php-node-redis__php
+        image: php-node-redis/php
+        env_file:
+            - .env
+        build:
+            context: ./php
+            dockerfile: ./php.Dockerfile
+            args:
+                PHP_WORKING_DIR: ${PHP_WORKING_DIR}
+        volumes:
+            - ./php/:${PHP_WORKING_DIR}
+
+    node:
+        container_name: php-node-redis__node
+        image: php-node-redis/node
+        user: "node"
+        env_file:
+            - .env
+        build:
+            context: ./node
+            dockerfile: ./node.Dockerfile
+            args:
+                NODE_WORKING_DIR: ${NODE_WORKING_DIR}
+        volumes:
+            - ./node/:${NODE_WORKING_DIR}
+
+    redis:
+        container_name: php-node-redis__redis
+        image: redis
+        command: redis-server --save 60 1 --loglevel warning --requirepass ${REDIS_PASS} --port ${REDIS_PORT}
+        ports:
+            - "6379:${REDIS_PORT}"
