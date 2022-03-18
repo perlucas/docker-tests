@@ -6,4 +6,8 @@ COPY . $PHP_WORKING_DIR
 
 WORKDIR $PHP_WORKING_DIR
 
-CMD ["sh", "./start_listener.sh"]
+RUN printf '\n' | pecl install redis-5.3.7
+
+RUN docker-php-ext-enable redis
+
+CMD php listener.php

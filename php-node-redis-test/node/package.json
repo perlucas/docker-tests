@@ -4,10 +4,12 @@
     "description": "",
     "main": "emitter.js",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "node emitter.js"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node emitter.js"
     },
     "author": "Luke Pereyra",
-    "license": "ISC"
-  }
-  
+    "license": "ISC",
+    "dependencies": {
+        "redis": "^4.0.4"
+    }
+}
