@@ -3,13 +3,13 @@
 ini_set('default_socket_timeout', -1);
 
 function makeConnection () {
-    // $HOST = getenv('REDIS_HOST');
-    // $PORT = getenv('REDIS_PORT');
-    // $PASS = getenv('REDIS_PASS');
+    $HOST = getenv('REDIS_HOST');
+    $PORT = getenv('REDIS_PORT');
+    $PASS = getenv('REDIS_PASS');
 
     $connection = new Redis();
-    $connection->connect('redis', 6379);
-    $connection->auth('test');
+    $connection->connect($HOST, $PORT);
+    $connection->auth($PASS);
     $connection->setOption(Redis::OPT_READ_TIMEOUT, -1);
 
     if ($connection->ping()) {

@@ -28,6 +28,7 @@ services:
                 NODE_WORKING_DIR: ${NODE_WORKING_DIR}
         volumes:
             - ./node/:${NODE_WORKING_DIR}
+            - /${NODE_WORKING_DIR}/node_modules
         tty: true
         stdin_open: true
         # command: "sh"

@@ -6,10 +6,8 @@ const createClient = redis.createClient;
 const TOTAL_RUNNING_SECONDS = 20;
 
 const publisher = createClient({
-    url: 'redis://default:test@redis:6379'
+    url: `redis://${process.env.REDIS_USER}:${process.env.REDIS_PASS}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
 });
-
-// await publisher.connect();
 
 const publishRedisMessage = async message => {
     await publisher.publish('my-testing-channel', message);
@@ -22,15 +20,6 @@ const emitEvent = () => {
 
     publishRedisMessage(`Time is ${timestamp}`);
 };
-
-// const INTERVAL_HANDLE = setInterval(emitEvent, 1000);
-
-// const stopEmitter = () => {
-//     clearInterval(INTERVAL_HANDLE);
-// };
-
-// setTimeout(stopEmitter, TOTAL_RUNNING_SECONDS * 1000);
-
 
 (async () => {
 
