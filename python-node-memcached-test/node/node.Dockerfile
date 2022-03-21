@@ -1,0 +1,13 @@
+FROM node
+
+ARG NODE_WORKING_DIR
+
+WORKDIR $NODE_WORKING_DIR
+
+COPY *.json $NODE_WORKING_DIR
+
+COPY *.js $NODE_WORKING_DIR
+
+RUN npm install
+
+CMD npm start

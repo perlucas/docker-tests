@@ -1,0 +1,43 @@
+services:
+
+    python:
+        container_name: python-node-memcached__python
+        image: python-node-memcached__python/python
+        env_file:
+            - .env
+        build:
+            context: ./python
+            dockerfile: ./python.Dockerfile
+            args:
+                PYTHON_WORKING_DIR: ${PYTHON_WORKING_DIR}
+        volumes:
+            - ./python/:${PYTHON_WORKING_DIR}
+        # command: "sh"
+        tty: true
+        stdin_open: true
+
+    node:
+        container_name: python-node-memcached__node
+        image: python-node-memcached__node/node
+        user: "node"
+        env_file:
+            - .env
+        build:
+            context: ./node
+            dockerfile: ./node.Dockerfile
+            args:
+                NODE_WORKING_DIR: ${NODE_WORKING_DIR}
+        volumes:
+            - ./node/:${NODE_WORKING_DIR}
+            - /${NODE_WORKING_DIR}/node_modules
+        tty: true
+        stdin_open: true
+        # command: "sh"
+
+    memcached:
+        container_name: python-node-memcached__memcached
+        image: memcached
+        ports:
+            - "11211:11211"
+        tty: true
+        stdin_open: true
