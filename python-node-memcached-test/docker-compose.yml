@@ -37,7 +37,9 @@ services:
     memcached:
         container_name: python-node-memcached__memcached
         image: memcached
+        env_file:
+            - .env
         ports:
-            - "11211:11211"
+            - "${MEMCACHED_PORT}:11211"
         tty: true
         stdin_open: true

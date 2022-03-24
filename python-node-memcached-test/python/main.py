@@ -1,16 +1,29 @@
 from pymemcache.client.base import Client
 import ast
+import time
+import os
 
-print("Hello world from python!!")
+time.sleep(3)
 
-client = Client('host.docker.internal:11211')
-client.set('some_key', 'some_value')
-result = client.get('some_key')
+print("Listening for remote clock from Python!")
 
-print(result)
-print(type(result))
-print(str(result))
-print(result.decode())
+client = Client(f"{os.environ['MEMCACHED_HOST']}:{os.environ['MEMCACHED_PORT']}")
 
+last_time = None
 
-client.set('python_message', { 'val': 'my string value' })
+while True:
+
+    result = client.get('remote-clock')
+
+    if result is None:
+        break
+
+    time_text = result.decode()
+
+    if last_time != time_text:
+        print(f"Got a new update!: {time_text}")
+        last_time = time_text
+
+    time.sleep(1)
+
+print("Finished listening for remote clock.")
