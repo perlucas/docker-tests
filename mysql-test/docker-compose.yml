@@ -1,40 +1,60 @@
 services:
-    # php:
-    #     image: php-node-networks-test/php-server
-    #     env_file:
-    #         - .env
-    #     build:
-    #         context: ./php
-    #         dockerfile: ./php.Dockerfile
-    #         args:
-    #             PHP_WORKING_DIR: ${PHP_WORKING_DIR}
-    #             PHP_HOST: ${PHP_HOST}
-    #             PHP_PORT: ${PHP_PORT}
-    #     volumes:
-    #         - ./php/:${PHP_WORKING_DIR}
-    #     networks:
-    #         my_custom:
-    #             ipv4_address: ${PHP_IP4}
-    
-  db:
-    image: mysql
-    command: --authentication_policy=mysql_native_password
-    restart: always
-    env_file:
-      - .env
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test
-    volumes:
-      - ./data/:/var/lib/mysql
-      - ./init_mysql/:/docker-entrypoint-initdb.d
+    php:
+        env_file:
+            - .env
+        build:
+            context: ./php
+            dockerfile: ./php.Dockerfile
+            args:
+                PHP_WORKING_DIR: ${PHP_WORKING_DIR}
+        volumes:
+            - ./php/:${PHP_WORKING_DIR}
+        networks:
+            custom:
+                ipv4_address: 10.0.0.2
+        depends_on:
+            - db
+      # command: "sh"
+      # tty: true
+      # stdin_open: true
 
-
+    python:
+        env_file:
+            - .env
+        build:
+            context: ./python
+            dockerfile: ./python.Dockerfile
+            args:
+                PYTHON_WORKING_DIR: ${PYTHON_WORKING_DIR}
+        volumes:
+            - ./python/:${PYTHON_WORKING_DIR}
+        networks:
+            custom:
+                ipv4_address: 10.0.0.4
+        depends_on:
+            - db
+        # command: "sh"
+        # tty: true
+        # stdin_open: true
     
-# networks:
-#     custom:
-#         driver: bridge
-#         ipam:
-#             config:
-#                 - subnet: 192.168.1.0/8
-#                   gateway: 192.168.1.1
+    db:
+        container_name: mysql-test__db__mysql
+        image: mysql
+        command: --authentication_policy=mysql_native_password
+        restart: always
+        env_file:
+            - .env
+        volumes:
+            - ./mysql/data/:/var/lib/mysql
+            - ./mysql/init/:/docker-entrypoint-initdb.d
+        networks:
+            custom:
+                ipv4_address: 10.0.0.3
+    
+networks:
+    custom:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.0.0.0/8
+                  gateway: 10.0.0.1
