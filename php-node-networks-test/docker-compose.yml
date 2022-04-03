@@ -1,0 +1,77 @@
+services:
+    php:
+        image: php-node-networks-test/php-server
+        env_file:
+            - .env
+        build:
+            context: ./php
+            dockerfile: ./php.Dockerfile
+            args:
+                PHP_WORKING_DIR: ${PHP_WORKING_DIR}
+                PHP_HOST: ${PHP_HOST}
+                PHP_PORT: ${PHP_PORT}
+        volumes:
+            - ./php/:${PHP_WORKING_DIR}
+        networks:
+            my_custom:
+                ipv4_address: ${PHP_IP4}
+    
+    node:
+        image: node
+        user: "node"
+        env_file:
+            - .env
+        build:
+            context: ./node
+            dockerfile: ./node.Dockerfile
+            args:
+                NODE_WORKING_DIR: ${NODE_WORKING_DIR}
+        volumes:
+            - ./node/:${NODE_WORKING_DIR}
+        networks:
+            my_custom:
+                ipv4_address: ${NODE_IP4}
+
+    bad_consumer1:
+        image: node
+        user: "node"
+        env_file:
+            - .env
+        build:
+            context: ./node
+            dockerfile: ./node.Dockerfile
+            args:
+                NODE_WORKING_DIR: ${NODE_WORKING_DIR}
+        volumes:
+            - ./node/:${NODE_WORKING_DIR}
+        networks:
+            my_custom2:
+                ipv4_address: 10.0.0.2
+
+
+    bad_consumer2:
+        image: node
+        user: "node"
+        env_file:
+            - .env
+        build:
+            context: ./node
+            dockerfile: ./node.Dockerfile
+            args:
+                NODE_WORKING_DIR: ${NODE_WORKING_DIR}
+        volumes:
+            - ./node/:${NODE_WORKING_DIR}
+    
+networks:
+    my_custom:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 192.168.1.0/8
+                  gateway: 192.168.1.1
+    my_custom2:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 10.0.0.0/8
+                  gateway: 10.0.0.1
