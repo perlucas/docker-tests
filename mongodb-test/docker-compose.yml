@@ -1,0 +1,38 @@
+services:
+
+  node:
+    image: node
+    user: "node"
+    env_file:
+      - .env
+    build:
+      context: ./node
+      dockerfile: ./node.Dockerfile
+    volumes:
+      - ./node/index.js:/home/node/app/index.js
+    networks:
+      custom:
+        ipv4_address: 10.0.0.2
+    
+  db:
+    image: mongo
+    restart: always
+    env_file:
+        - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: test
+    volumes:
+      - ./mongo/init/:/docker-entrypoint-initdb.d
+    networks:
+      custom:
+        ipv4_address: ${MONGO_HOST}
+    
+networks:
+  custom:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/8
+          gateway: 10.0.0.1
