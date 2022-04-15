@@ -7,16 +7,11 @@ services:
             dockerfile: ./php.Dockerfile
             args:
                 PHP_WORKING_DIR: ${PHP_WORKING_DIR}
-        volumes:
-            - ./php/:${PHP_WORKING_DIR}
         networks:
             custom:
                 ipv4_address: 10.0.0.2
         depends_on:
             - db
-      # command: "sh"
-      # tty: true
-      # stdin_open: true
 
     python:
         env_file:
@@ -26,16 +21,11 @@ services:
             dockerfile: ./python.Dockerfile
             args:
                 PYTHON_WORKING_DIR: ${PYTHON_WORKING_DIR}
-        volumes:
-            - ./python/:${PYTHON_WORKING_DIR}
         networks:
             custom:
                 ipv4_address: 10.0.0.4
         depends_on:
             - db
-        # command: "sh"
-        # tty: true
-        # stdin_open: true
     
     db:
         container_name: mysql-test__db__mysql
@@ -49,7 +39,23 @@ services:
             - ./mysql/init/:/docker-entrypoint-initdb.d
         networks:
             custom:
-                ipv4_address: 10.0.0.3
+                ipv4_address: ${MYSQL_HOST}
+
+    phpmyadmin:
+        # login as custom_user/custom_password, server: db or 10.0.0.3
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8080:80
+        env_file:
+            - .env
+        environment:
+            - PMA_ARBITRARY=1
+        depends_on:
+            - db
+        networks:
+            custom:
+                ipv4_address: 10.0.0.50
     
 networks:
     custom:

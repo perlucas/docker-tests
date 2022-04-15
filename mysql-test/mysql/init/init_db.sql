@@ -18,5 +18,18 @@ CREATE TABLE players (
 );
 
 INSERT INTO players VALUES
-    (null, 'Leonel Messi', 10, '1995-05-10'),
-    (null, 'Jhon Doe', 30, '1995-02-20');
+   (null, 'Eliam Benischek', 10, '1995-05-10'),
+   (null, 'Hadleigh Blondin', 10, '1995-05-10'),
+   (null, 'Kolten Plantenberg', 10, '1995-05-10'),
+   (null, 'Lavon Priode', 10, '1995-05-10'),
+   (null, 'Paxton Vanacore', 10, '1995-05-10'),
+   (null, 'Fynn Baiotto', 10, '1995-05-10'),
+   (null, 'Killian Macewen', 10, '1995-05-10'),
+   (null, 'Leandro Stagman', 10, '1995-05-10'),
+   (null, 'Moana Tice', 10, '1995-05-10'),
+   (null, 'Mohammed Wolfrum', 10, '1995-05-10'),
+   (null, 'Allyson Badlam', 10, '1995-05-10'),
+   (null, 'Arjun Hoene', 10, '1995-05-10'),
+   (null, 'Ava Mercurio', 10, '1995-05-10'),
+   (null, 'Kentrell Norcott', 10, '1995-05-10'),
+   (null, 'Killian Prioleau', 10, '1995-05-10');
