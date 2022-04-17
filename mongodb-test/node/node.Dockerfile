@@ -1,19 +1,11 @@
 FROM node
 
-USER node
-
 WORKDIR /home/node/app
 
-COPY . .
+COPY index.js index.js
 
-# RUN npm init
+COPY package.json package.json
 
-RUN npm install mongoose
+RUN npm install
 
-RUN cat package.json
-
-# RUN chown -R node .
-
-# USER node
-
-# CMD node index.js
+USER node
