@@ -1,4 +1,14 @@
-db.insertMany([
+db.createUser(
+    {
+        user: "tester",
+        pwd:  "tester",
+        roles: [
+            { role: "readWrite", db: "test" }
+        ]
+    }
+);
+
+db.players.insertMany([
     {
         name: 'Eliam Benischek',
         score: 10,
