@@ -16,13 +16,13 @@ services:
     
   db:
     image: mongo
-    restart: always
+    # restart: always
     env_file:
         - .env
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: test
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
     volumes:
       - ./mongo/init/:/docker-entrypoint-initdb.d
     networks:

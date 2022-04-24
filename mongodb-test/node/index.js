@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 
+const { MONGO_USER, MONGO_PASSWORD, MONGO_DB, MONGO_PORT, MONGO_HOST} = process.env;
+
+const connectionUrl = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}`
 
 const PlayerSchema = new mongoose.Schema({
     name: String,
@@ -8,13 +11,21 @@ const PlayerSchema = new mongoose.Schema({
 });
 
 (async () => {
-    const connection = await mongoose.connect('mongodb://tester:tester@db:27017/test');
+    const connection = await mongoose.connect(connectionUrl);
 
     const Player = connection.model('Player', PlayerSchema);
 
     const players = await Player.find({});
 
-    console.info(players);
+    players.forEach(player => {
+        const date = new Date(player.birthdate);
+
+        const dateString = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
+        const info = `Player: ${player.name}, score: ${player.score}, born on: ${dateString}`;
+        
+        console.log(info);
+    });
 
     await mongoose.connection.close();
 
